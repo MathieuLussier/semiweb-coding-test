@@ -1,5 +1,6 @@
 import { PlayerCard } from "./card";
 import {MAX_NB_PLAYER, MIN_NB_PLAYER} from "./constant";
+import Game from "./game";
 
 export interface IPlayerManager {
     players: Player[];
@@ -8,11 +9,14 @@ export interface IPlayerManager {
 }
 
 export default class PlayerManager implements IPlayerManager {
+    private readonly _game: Game;
     private readonly _players: Player[] = [];
 
-    constructor(nbPlayers: number) {
+    constructor(game: Game, nbPlayers: number) {
         if (nbPlayers < MIN_NB_PLAYER || nbPlayers > MAX_NB_PLAYER)
             throw new Error(`Number of players can only be between ${MIN_NB_PLAYER} and ${MAX_NB_PLAYER}`);
+
+        this._game = game;
 
         for (let i = 0; i < nbPlayers; i++) {
             this._players.push(new Player(i));

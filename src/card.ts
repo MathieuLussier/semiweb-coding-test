@@ -1,5 +1,6 @@
 import { CARD_COLORS, NB_CARDS_PER_COLOR } from "./constant";
 import PlayerManager, { Player } from "./player";
+import Game from "./game";
 
 export interface ICard {
     readonly id: number;
@@ -77,8 +78,11 @@ export interface ICardManager {
 }
 
 export default class CardManager extends CardStorage implements ICardManager {
-    constructor() {
+    private readonly _game: Game;
+
+    constructor(game: Game) {
         super();
+        this._game = game;
         this.init();
     }
 
@@ -87,6 +91,7 @@ export default class CardManager extends CardStorage implements ICardManager {
      */
     private init() {
         this.prepareCards();
+        this.shuffleCards();
     }
 
     private prepareCards() {
@@ -101,9 +106,12 @@ export default class CardManager extends CardStorage implements ICardManager {
         }
     }
 
-    public shuffleCards(players: Player[]) {
-        const nbCardsPerPerson = this.getCards().length / players.length;
-        for (const player of players) {
+    /**
+     * I know this method can cause problem if nbCards % nbPlayers !== 0
+     */
+    public shuffleCards() {
+        const nbCardsPerPerson = this.getCards().length / this._game.playerManager.players.length;
+        for (const player of this._game.playerManager.players) {
             for (let i = 0; i < nbCardsPerPerson; i++) {
                 const randomCard = this.getCards()[Math.floor(Math.random()*this.getCards().length)];
                 player.addCard(randomCard);
@@ -114,7 +122,7 @@ export default class CardManager extends CardStorage implements ICardManager {
 
     public reset() {
         this.clearCards();
-        this.prepareCards();
+        this.init();
     }
 }
 

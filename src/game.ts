@@ -12,19 +12,13 @@ export default class Game implements IGame {
     public readonly cardManager: CardManager;
 
     constructor(nbPlayers: number) {
-        this.playerManager = new PlayerManager(nbPlayers)
-        this.cardManager = new CardManager()
-        this.init();
-    }
-
-    private init() {
-        this.cardManager.shuffleCards(this.playerManager.getPlayers());
+        this.playerManager = new PlayerManager(this, nbPlayers)
+        this.cardManager = new CardManager(this)
     }
 
     public reset() {
         this.playerManager.reset();
         this.cardManager.reset();
-        this.init();
     }
 }
 
