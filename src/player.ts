@@ -42,7 +42,7 @@ export interface IPlayer {
     id: number;
 }
 
-export class Player extends PlayerCard {
+export class Player extends PlayerCard implements IPlayer {
      private readonly _id: number;
 
      constructor(id: number) {
